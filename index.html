@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Vision</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-1610-large.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="cosmic-bg"></div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Cosmic Vision</h2>
+        </div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" data-section="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+            <div class="menu-item" data-section="missions">
+                <i class="fas fa-satellite"></i>
+                <span>Space Missions</span>
+            </div>
+            <div class="menu-item" data-section="events">
+                <i class="fas fa-meteor"></i>
+                <span>Cosmic Events</span>
+            </div>
+            <div class="menu-item" data-section="observations">
+                <i class="fas fa-telescope"></i>
+                <span>Observations</span>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <div class="user-profile" id="userProfile">
+                <img src="https://via.placeholder.com/40" alt="User">
+                <span>Guest</span>
+                <button class="login-button" onclick="showLoginModal()">Login</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Cosmic Vision</h2>
+            <div class="social-login">
+                <button class="google-login" onclick="handleGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    Continue with Google
+                </button>
+            </div>
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-submit">Login</button>
+            </form>
+            <div class="login-options">
+                <p>Don't have an account? <a href="#" onclick="showSignupModal()">Sign up</a></p>
+                <p><a href="#" onclick="showForgotPasswordModal()">Forgot Password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeSignupModal()">&times;</span>
+            <h2>Create Account</h2>
+            <div class="social-login">
+                <button class="google-login" onclick="handleGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    Continue with Google
+                </button>
+            </div>
+            <div class="login-divider">
+                <span>or</span>
+            </div>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="college">College/University</label>
+                    <input type="text" id="college" name="college" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="13" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fascination">What fascinates you about space?</label>
+                    <textarea id="fascination" name="fascination" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="signup-submit">Sign Up</button>
+            </form>
+            <div class="signup-options">
+                <p>Already have an account? <a href="#" onclick="showLoginModal()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeProfileModal()">&times;</span>
+            <h2>User Profile</h2>
+            <div class="profile-content" id="profileContent">
+                <!-- Profile content will be dynamically loaded here -->
+            </div>
+            <div class="profile-actions">
+                <button class="edit-profile" onclick="showEditProfile()">Edit Profile</button>
+                <button class="view-feedback" onclick="showUserFeedback()">View Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="content-section active">
+            <header>
+                <h1>Cosmic Vision</h1>
+                <p>Explore the wonders of the universe</p>
+            </header>
+
+            <div class="search-container">
+                <input type="text" id="cosmicSearch" placeholder="Ask about the cosmos...">
+                <button id="searchButton">Search</button>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Upcoming Events</h3>
+                    <p class="stat-value">5</p>
+                    <button class="dashboard-button" onclick="showEventDetails('solar-eclipse')">View Events</button>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Active Missions</h3>
+                    <p class="stat-value">3</p>
+                    <button class="dashboard-button" onclick="showDiscoveryDetails('exoplanet')">View Missions</button>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-telescope"></i>
+                    <h3>Recent Discoveries</h3>
+                    <p class="stat-value">8</p>
+                    <button class="dashboard-button" onclick="showFactDetails('black-hole')">View Discoveries</button>
+                </div>
+            </div>
+
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Cosmic Events</h3>
+                        <span class="card-icon"><i class="fas fa-calendar-star"></i></span>
+                    </div>
+                    <div class="card-content">
+                        <div class="event-item">
+                            <div class="event-date">May 5-6, 2025</div>
+                            <h4>Eta Aquariids Meteor Shower</h4>
+                            <p>One of the best meteor showers of the year, originating from Halley's Comet. Best viewed in the Southern Hemisphere.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-meteor"></i> Meteor Shower</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Worldwide</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">June 21, 2025</div>
+                            <h4>Summer Solstice</h4>
+                            <p>The longest day of the year in the Northern Hemisphere, marking the official start of summer.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-sun"></i> Seasonal Event</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Northern Hemisphere</span>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">September 7, 2025</div>
+                            <h4>Total Lunar Eclipse</h4>
+                            <p>A total lunar eclipse visible across the Americas, Europe, and Africa, creating a stunning "blood moon" effect.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-moon"></i> Lunar Event</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Americas, Europe, Africa</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="view-details" onclick="showEventDetails('eta-aquariids')">View Meteor Shower Details</button>
+                        <button class="view-details" onclick="showEventDetails('solstice')">View Solstice Details</button>
+                        <button class="view-details" onclick="showEventDetails('lunar-eclipse')">View Lunar Eclipse Details</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Space Discoveries</h3>
+                        <span class="card-icon"><i class="fas fa-telescope"></i></span>
+                    </div>
+                    <div class="card-content">
+                        <div class="discovery-item">
+                            <h4>New Exoplanet Discovery</h4>
+                            <p>Scientists have discovered a potentially habitable exoplanet in the Goldilocks zone of its star.</p>
+                            <div class="discovery-meta">
+                                <span class="discovery-date">March 10, 2024</span>
+                                <span class="discovery-source">NASA</span>
+                            </div>
+                        </div>
+                        <div class="discovery-item">
+                            <h4>Water on Mars</h4>
+                            <p>New evidence of liquid water beneath the Martian surface has been discovered by the Perseverance rover.</p>
+                            <div class="discovery-meta">
+                                <span class="discovery-date">March 8, 2024</span>
+                                <span class="discovery-source">ESA</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="view-details" onclick="showDiscoveryDetails('exoplanet')">View Exoplanet Details</button>
+                        <button class="view-details" onclick="showDiscoveryDetails('mars-water')">View Mars Water Details</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Astronomy Facts</h3>
+                        <span class="card-icon"><i class="fas fa-book"></i></span>
+                    </div>
+                    <div class="card-content">
+                        <div class="fact-item">
+                            <h4>Black Hole Facts</h4>
+                            <p>Did you know that black holes can spin at nearly the speed of light? The fastest spinning black hole discovered rotates at 1,000 times per second!</p>
+                        </div>
+                        <div class="fact-item">
+                            <h4>Galaxy Formation</h4>
+                            <p>Our Milky Way galaxy is on a collision course with the Andromeda galaxy, but don't worry - this won't happen for another 4 billion years!</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="view-details" onclick="showFactDetails('black-hole')">View Black Hole Facts</button>
+                        <button class="view-details" onclick="showFactDetails('galaxy-formation')">View Galaxy Facts</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3>Recent Updates</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <i class="fas fa-newspaper"></i>
+                        <div class="activity-content">
+                            <p>New cosmic event added: Total Solar Eclipse 2024</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="fas fa-satellite"></i>
+                        <div class="activity-content">
+                            <p>SpaceX successfully launched new satellite constellation</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="fas fa-user-astronaut"></i>
+                        <div class="activity-content">
+                            <p>NASA announced new astronaut selection</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="content-section">
+            <header>
+                <h1>Space Analytics</h1>
+                <p>Data-driven insights into cosmic phenomena</p>
+            </header>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h2>Mission Success Rate</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <canvas id="successRateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h2>Cosmic Event Trends</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <canvas id="eventTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar"></i>
+                        <h2>Observation Statistics</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <canvas id="observationStatsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Space Missions Section -->
+        <section id="missions" class="content-section">
+            <header>
+                <h1>Active Space Missions</h1>
+                <p>Current and upcoming space exploration missions</p>
+            </header>
+            
+            <div class="missions-grid">
+                <div class="mission-card">
+                    <div class="card-header">
+                        <i class="fas fa-rocket"></i>
+                        <h2>James Webb Space Telescope</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Status: <span class="status active">Active</span></p>
+                        <p>Launch Date: December 25, 2021</p>
+                        <p>Primary Mission: Study the formation of stars and planets</p>
+                        <div class="mission-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 85%"></div>
+                            </div>
+                            <span>85% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="card-header">
+                        <i class="fas fa-satellite"></i>
+                        <h2>Mars Perseverance Rover</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Status: <span class="status active">Active</span></p>
+                        <p>Launch Date: July 30, 2020</p>
+                        <p>Primary Mission: Search for signs of ancient life</p>
+                        <div class="mission-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 60%"></div>
+                            </div>
+                            <span>60% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="card-header">
+                        <i class="fas fa-space-shuttle"></i>
+                        <h2>Artemis Program</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Status: <span class="status upcoming">Upcoming</span></p>
+                        <p>Launch Date: 2024</p>
+                        <p>Primary Mission: Return humans to the Moon</p>
+                        <div class="mission-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 30%"></div>
+                            </div>
+                            <span>30% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Observations Section -->
+        <section id="observations" class="content-section">
+            <header>
+                <h1>Astronomical Observations</h1>
+                <p>Latest findings from our observatories</p>
+            </header>
+            
+            <div class="observations-grid">
+                <div class="observation-card">
+                    <div class="card-header">
+                        <i class="fas fa-star"></i>
+                        <h2>Exoplanet Discovery</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Location: Kepler-186f</p>
+                        <p>Type: Earth-like exoplanet</p>
+                        <p>Distance: 500 light-years</p>
+                        <div class="observation-details">
+                            <p>Potential for liquid water and habitable conditions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="observation-card">
+                    <div class="card-header">
+                        <i class="fas fa-meteor"></i>
+                        <h2>Comet Observation</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Name: C/2023 A3 (Tsuchinshan-ATLAS)</p>
+                        <p>Type: Long-period comet</p>
+                        <p>Next Perihelion: 2024</p>
+                        <div class="observation-details">
+                            <p>Expected to be visible to the naked eye</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="observation-card">
+                    <div class="card-header">
+                        <i class="fas fa-galaxy"></i>
+                        <h2>Galaxy Merger</h2>
+                    </div>
+                    <div class="card-content">
+                        <p>Location: NGC 4676</p>
+                        <p>Type: Interacting galaxies</p>
+                        <p>Distance: 300 million light-years</p>
+                        <div class="observation-details">
+                            <p>Captured in unprecedented detail</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cosmic Events Section -->
+        <section id="events" class="content-section">
+            <header>
+                <h1>Cosmic Events</h1>
+                <p>Track and explore cosmic phenomena in real-time</p>
+                <div class="event-filters">
+                    <button class="filter-btn active" data-filter="all">All Events</button>
+                    <button class="filter-btn" data-filter="eclipse">Eclipses</button>
+                    <button class="filter-btn" data-filter="meteor">Meteor Showers</button>
+                    <button class="filter-btn" data-filter="planet">Planetary Events</button>
+                </div>
+            </header>
+            
+            <div class="events-container">
+                <div class="events-timeline">
+                    <div class="timeline-item" data-type="eclipse">
+                        <div class="timeline-date">March 14, 2025</div>
+                        <div class="timeline-content">
+                            <h3>Total Solar Eclipse</h3>
+                            <p>A spectacular total solar eclipse will be visible across Europe and Asia. The path of totality will stretch from Spain through Turkey and into Russia.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-sun"></i> Solar Event</span>
+                                <span class="event-location"><i class="fas fa-map-marker-alt"></i> Europe & Asia</span>
+                            </div>
+                            <button class="view-details-btn" onclick="showEventDetails('solar-eclipse')">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" data-type="meteor">
+                        <div class="timeline-date">April 22, 2025</div>
+                        <div class="timeline-content">
+                            <h3>Lyrid Meteor Shower</h3>
+                            <p>The Lyrid meteor shower peaks with optimal viewing conditions. This year's shower coincides with a new moon, making it particularly spectacular.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-meteor"></i> Meteor Shower</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Worldwide</span>
+                            </div>
+                            <button class="view-details-btn" onclick="showEventDetails('lyrid-meteor')">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" data-type="planet">
+                        <div class="timeline-date">September 29, 2025</div>
+                        <div class="timeline-content">
+                            <h3>Planetary Alignment</h3>
+                            <p>Venus, Mars, and Jupiter will align in the morning sky, creating a rare and beautiful celestial display.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-planet-ringed"></i> Planetary Event</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Worldwide</span>
+                            </div>
+                            <button class="view-details-btn" onclick="showEventDetails('planetary-alignment')">View Details</button>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-type="eclipse">
+                        <div class="timeline-date">September 7, 2025</div>
+                        <div class="timeline-content">
+                            <h3>Total Lunar Eclipse</h3>
+                            <p>A total lunar eclipse will be visible across the Americas, Europe, and Africa, creating a stunning "blood moon" effect.</p>
+                            <div class="event-details">
+                                <span class="event-type"><i class="fas fa-moon"></i> Lunar Event</span>
+                                <span class="event-location"><i class="fas fa-globe"></i> Americas, Europe, Africa</span>
+                            </div>
+                            <button class="view-details-btn" onclick="showEventDetails('lunar-eclipse')">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cosmic-chat">
+                    <div class="chat-header">
+                        <h3>Cosmic Assistant</h3>
+                        <div class="chat-status">
+                            <span class="status-indicator"></span>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages">
+                        <div class="message assistant">
+                            <div class="message-content">
+                                <p>Hello! I'm your cosmic assistant. I can help you with:</p>
+                                <ul>
+                                    <li>Upcoming cosmic events in 2025</li>
+                                    <li>Best viewing locations and times</li>
+                                    <li>Equipment recommendations</li>
+                                    <li>Astronomy facts and discoveries</li>
+                                </ul>
+                                <p>What would you like to know about?</p>
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" placeholder="Ask about cosmic events...">
+                        <button class="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
